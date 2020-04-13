@@ -30,7 +30,7 @@ def get_args():
     parser.add_argument('dir_name',
                         nargs='?',
                         help="Output directory name (default: quartus)")
-    parser.add_argument('prefix',
+    parser.add_argument('fprefix',
                         nargs='?',
                         help="Prefix for output files (default: '')")
     parser.add_argument('-V', '--version',
@@ -76,10 +76,10 @@ class QuartusTemplateParser():
     Keyword Arguments:
     fname   -- parser file name
     dirname -- directory to output files
-    prefix  -- output files prefix
+    fprefix -- output files prefix
     """
-    def __init__(self, fname, dirname, prefix):
-        self.build(fname, dirname, prefix)
+    def __init__(self, fname, dirname, fprefix):
+        self.build(fname, dirname, fprefix)
 
     def build(self, fname, dirname, fprefix):
         """Run"""
@@ -116,8 +116,8 @@ class QuartusTemplateParser():
                     if s.find('end_template') == 0:
                         body = False
                         key = fprefix + group + '-' + name[len(fprefix):]
-                        prefix = self.yas_header(name, key)
-                        s_data = '%s\n%s' % (prefix, s_data)
+                        header2file = self.yas_header(name, key)
+                        s_data = '%s\n%s' % (header2file, s_data)
                         fname = '%s/%s' % (dirname, name)
                         print('File: %s' % fname)
                         print('  name = %s' % name)
@@ -157,12 +157,12 @@ def main():
     args = get_args()
     fname = args.fname
     dir_name = args.dir_name
-    prefix = args.prefix
+    fprefix = args.fprefix
     if dir_name is None:
         dir_name = 'quartus'
-    if prefix is None:
-        prefix = ''
-    QuartusTemplateParser(fname, dir_name, prefix)
+    if fprefix is None:
+        fprefix = ''
+    QuartusTemplateParser(fname, dir_name, fprefix)
 
 
 if __name__ == '__main__':
