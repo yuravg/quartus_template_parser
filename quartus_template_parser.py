@@ -25,7 +25,7 @@ def get_args():
                             description=__description__,
                             epilog=__epilog__)
     parser.add_argument('fname',
-                        help="Quartus template file (<dir>/intelFPGA/<version>\
+                        help="Quartus template file (<INTEL_FPGA_DIR>/<version>\
 /quartus/common/templates/languages/<name>.tpl)")
     parser.add_argument('dir_name',
                         nargs='?',
