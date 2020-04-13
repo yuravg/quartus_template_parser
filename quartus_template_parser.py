@@ -116,12 +116,19 @@ class QuartusTemplateParser():
                     if s.find('end_template') == 0:
                         body = False
                         key = fprefix + group + '-' + name[len(fprefix):]
-                        header2file = self.yas_header(name, key)
+                        # cut last char(to improve readable snippet group name):
+                        if fprefix[-1] == '-' or fprefix[-1] == '_':
+                            s_fprefix = fprefix[:-1]
+                        else:
+                            s_fprefix = fprefix
+                        group2yas = '%s %s' % (s_fprefix, group)
+                        header2file = self.yas_header(name, key, group2yas)
                         s_data = '%s\n%s' % (header2file, s_data)
                         fname = '%s/%s' % (dirname, name)
                         print('File: %s' % fname)
-                        print('  name = %s' % name)
-                        print('  key  = %s' % key)
+                        print('  name  = %s' % name)
+                        print('  key   = %s' % key)
+                        print('  group = %s' % group2yas)
                         self.write_file(fname, s_data)
 
     def replace(self, st):
@@ -143,11 +150,12 @@ class QuartusTemplateParser():
         f.write(strg)
         f.close()
 
-    def yas_header(self, name, key):
+    def yas_header(self, name, key, group):
         """Prepare Yasnippet header."""
         s = '# -*- mode: snippet -*-'
         s = '%s\n# name: %s' % (s, name)
         s = '%s\n# key: %s' % (s, key)
+        s = '%s\n# group: %s' % (s, group)
         s = '%s\n# --' % s
         return s
 
